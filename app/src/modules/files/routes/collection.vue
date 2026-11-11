@@ -332,7 +332,9 @@ function useFileUpload() {
 			notificationsStore.remove(dragNotificationID);
 		}
 
-		const files = Array.from(event.dataTransfer.files).filter((file) => file.type);
+		// Browsers leave `type` empty for many valid files (e.g. CAD or proprietary formats). Only drop
+		// empty-typed entries that have no content, which is what dropped folders look like.
+		const files = Array.from(event.dataTransfer.files).filter((file) => file.type || file.size > 0);
 
 		fileUploadNotificationID = notificationsStore.add({
 			title: t(

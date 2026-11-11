@@ -25,7 +25,8 @@ const userStore = useUserStore();
 
 const repeaterValue = computed({
 	get() {
-		return props.value?.fields?.map((field: Field) => field.meta);
+		// The field key lives on the outer entry, not in `meta`, so it has to be merged in for the repeater template.
+		return props.value?.fields?.map((field: Field) => ({ ...field.meta, field: field.field }));
 	},
 	set(newVal: FieldMeta[] | null) {
 		const fields = (newVal || []).map((meta: Record<string, any>) => ({
